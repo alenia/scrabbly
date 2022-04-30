@@ -42,4 +42,9 @@ describe('drawTile', () => {
     expect(lastDraw.length).toEqual(100);
     expect(lastDraw).toEqual(fullSet);
   });
+
+  it('should randomize tiles', () => {
+    const someFirstTiles = [drawTile([]),drawTile([]),drawTile([]),drawTile([])].flat();
+    expect(new Set(someFirstTiles).size).toBeGreaterThan(1);
+  });
 });

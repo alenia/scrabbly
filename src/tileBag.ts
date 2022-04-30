@@ -17,8 +17,8 @@ Object.entries(letterDistribution).forEach(
 
 //possible ToDo: use typescript better so that the tiles are all acutally members of tileBag?
 export const drawTile = (tileRack: string[]) : string[] => {
-  // I don't think I like what I'm doing here filtering every time, but I also don't like the idea of hanging onto [tiles] and [remainingTiles]
   if(tileRack.length === tileBag.length) { return tileRack; }
+
   const remainingTiles = tileBag.filter((t) => tileRack.indexOf(t) === -1);
 
   const nextTile = remainingTiles[Math.floor(Math.random() * remainingTiles.length)];
