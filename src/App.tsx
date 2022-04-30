@@ -1,24 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+function Tile( { letter } : { letter : string } ) {
+  useEffect(() => {
+    console.log(`Adding tile ${letter}`);
+    return () => { console.log(`Removing tile ${letter}`); }
+  });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="tile">
+      { letter }
+    </div>
+  );
+}
+
+function App() {
+  const [tiles, setTiles] = useState([] as string[]);
+  const drawTile = () => {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const nextTile = alphabet[Math.floor(Math.random() * alphabet.length)];
+    return setTiles([...tiles, nextTile]);
+  };
+  const renderTiles = () => tiles.map(t => (<Tile letter={t} />));
+  return (
+    <div>
+      <button onClick = {drawTile}>
+        Draw tile
+      </button>
+      <div className="rack">
+        { renderTiles() }
+      </div>
     </div>
   );
 }
