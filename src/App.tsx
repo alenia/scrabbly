@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import tileBag from './tileBag';
 
 function Tile( { letter } : { letter : string } ) {
   useEffect(() => {
@@ -17,11 +17,10 @@ function Tile( { letter } : { letter : string } ) {
 function App() {
   const [tiles, setTiles] = useState([] as string[]);
   const drawTile = () => {
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const nextTile = alphabet[Math.floor(Math.random() * alphabet.length)];
-    return setTiles([...tiles, nextTile]);
+    const nextTile = tileBag[Math.floor(Math.random() * tileBag.length)];
+    return setTiles([...tiles, nextTile]); // [A8, H2, ... ]
   };
-  const renderTiles = () => tiles.map(t => (<Tile letter={t} />));
+  const renderTiles = () => tiles.map(t => (<Tile key={t} letter={t[0]} />));
   return (
     <div>
       <button onClick = {drawTile}>
