@@ -6,6 +6,7 @@ const letterDistribution = {
 
 const tileBag = [] as string[];
 
+// Is there a way to do this with fewer loops?
 Object.entries(letterDistribution).forEach(
   ([letter, quantity]) => {
     for (let i = 0; i < quantity; i++) {
