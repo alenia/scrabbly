@@ -1,4 +1,4 @@
-import tileBag from './tileBag';
+import tileBag, { drawTile } from './tileBag';
 
 describe('tileBag', () => {
   it('should have the correct number of tiles', () => {
@@ -14,4 +14,32 @@ describe('tileBag', () => {
     const blankTiles = tileBag.filter(t => t[0] === ' ')
     expect(blankTiles).toEqual([' 0', ' 1']);
   })
+});
+
+describe('drawTile', () => {
+  it('chooses a tile from the tile bag', () => {
+    const newTiles = drawTile([]);
+    expect(newTiles.length).toEqual(1);
+    expect(tileBag).toContain(newTiles[0]);
+  });
+
+  it('chooses the last tile if there is one tile left', () => {
+    const allButQ = tileBag.filter((t) => t !== 'Q0');
+    expect(allButQ.length).toEqual(99)
+
+    const newTiles = drawTile(allButQ);
+    expect(newTiles.length).toEqual(100);
+    expect(newTiles[99]).toEqual('Q0')
+  });
+
+  it('does not keep drawing when the last tile has been drawn', () => {
+    const allButQ = tileBag.filter((t) => t !== 'Q0');
+    expect(allButQ.length).toEqual(99)
+
+    const fullSet = drawTile(allButQ);
+    expect(fullSet.length).toEqual(100);
+    const lastDraw = drawTile(fullSet);
+    expect(lastDraw.length).toEqual(100);
+    expect(lastDraw).toEqual(fullSet);
+  });
 });
