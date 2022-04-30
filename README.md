@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Scrabbly
+
+This is a project to draw scrabble tiles from the bag. I'm using it to refamiliarize myself with React.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
