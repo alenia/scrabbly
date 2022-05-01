@@ -39,8 +39,8 @@
   margin: 0;
   transform: translateY(-20px);
   transition:
-    opacity 400ms ease-in,
-    transform 400ms ease-in,
-    width 300ms ease-in-out 350ms,
-    margin 300ms ease-in-out 350ms;
+    opacity 400ms ease-out,
+    transform 400ms ease-out,
+    width 350ms ease 300ms,
+    margin 350ms ease 300ms;
 }
