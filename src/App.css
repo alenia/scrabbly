@@ -2,16 +2,38 @@
   display: flex;
   flex-wrap: wrap;
   width: 800px;
-  justify-content: space-between;
 }
+
 .tile {
   border: 1px solid #ffaaaa;
   background: #ffcccc;
+  height: 50px;
+  width: 50px;
+  margin: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 50px;
-  width: 50px;
-  align: center;
-  margin: 5px;
+}
+
+.tile-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.tile-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 500ms ease-in, transform 500ms ease-in;
+}
+
+.tile-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tile-exit-active {
+  opacity: 0;
+  /*width: 0;*/
+  transform: translateY(20px);
+  transition: opacity 500ms ease-in, transform 500ms ease-in;
 }

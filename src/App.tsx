@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import './App.css';
 import tileBag, { drawTile } from './tileBag';
 
@@ -22,15 +23,18 @@ function App() {
 
   const removeTile = (tile : string) => (() => setTiles(tiles.filter((t) => t !== tile)));
 
-  const renderTiles = () => tiles.map(t => (<Tile key={t} letter={t[0]} onClick={removeTile(t)}/>));
   return (
     <div>
       <button onClick = {() => setTiles(drawTile(tiles))}>
         Draw tile
       </button>
-      <div className="rack">
-        { renderTiles() }
-      </div>
+      <TransitionGroup className="rack">
+      { tiles.map(t => (
+        <CSSTransition key={t} timeout={1000} classNames="tile">
+          <Tile letter={t[0]} onClick={removeTile(t)}/>
+        </CSSTransition>
+      ))}
+      </TransitionGroup>
     </div>
   );
 }
