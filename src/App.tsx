@@ -30,7 +30,7 @@ function App() {
       </button>
       <TransitionGroup className="rack">
       { tiles.map(t => (
-        <CSSTransition key={t} timeout={1000} classNames="tile">
+        <CSSTransition key={t} timeout={{enter: 400, exit: 650}} classNames="tile">
           <Tile letter={t[0]} onClick={removeTile(t)}/>
         </CSSTransition>
       ))}
