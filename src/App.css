@@ -15,6 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 200ms ease;
 }
 
 .tile-enter {
@@ -33,7 +34,11 @@
   transform: translateY(0);
 }
 
-.tile-exit-active {
+.tile:hover{
+  transform: rotate(-5deg);
+}
+
+.tile-exit-active, .tile.tile-exit-active:hover {
   opacity: 0;
   width: 0;
   margin: 0;
