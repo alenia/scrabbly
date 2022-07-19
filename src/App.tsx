@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import './App.css';
-import tileBag, { drawTile } from './tileBag';
+import tileBag, { maybeNewTile } from './tileBag';
 
 function Tile( { letter, onClick } : { letter : string, onClick: () => void } ) {
   useEffect(() => {
@@ -15,10 +15,10 @@ function Tile( { letter, onClick } : { letter : string, onClick: () => void } ) 
   );
 }
 
-function Rack( { tiles, discardTile } : { tiles: string[], discardTile: (tile: string) => () => void } ) {
+function Rack( { player, tiles, discardTile } : { player: number, tiles: string[], discardTile: (tile: string) => () => void } ) {
 
   return (
-      <TransitionGroup className="rack">
+      <TransitionGroup className={`rack player${player}`}>
         { tiles.map(t => (
           <CSSTransition key={t} timeout={{enter: 400, exit: 650}} classNames="tile">
             <Tile letter={t[0]} onClick={discardTile(t)}/>
@@ -30,22 +30,35 @@ function Rack( { tiles, discardTile } : { tiles: string[], discardTile: (tile: s
 
 function App() {
   const playerCount = 4;
+  //TODO:
+  //tiles = {
+  //  0: [tile, tile, tile],
+  //  1: [tile, tile, tile],
+  //  2: [tile, tile, tile],
+  //  3: [tile, tile]
+  //}
   const [tiles, setTiles] = useState([] as string[]);
   const [player, setPlayer] = useState(0);
 
+  const drawTile = () => {
+    const nextTile = maybeNewTile(tiles);
+    if(!nextTile) { return }
+    setTiles([...tiles, nextTile])
+  };
   const discardTile = (tile : string) => (() => setTiles(tiles.filter((t) => t !== tile)));
 
   return (
     <div className={`currentPlayer${player}`}>
       <div className="buttons">
-        <button onClick={() => setTiles(drawTile(tiles))}>
+        <button onClick={drawTile}>
           Draw tile
         </button>
         <button onClick={() => setPlayer((player + 1) % playerCount)}>
           Next player
         </button>
       </div>
-      <Rack tiles={tiles} discardTile={discardTile}/>
+      <Rack player={0} tiles={tiles} discardTile={discardTile}/>
+      <Rack player={1} tiles={tiles} discardTile={discardTile}/>
     </div>
   );
 }

@@ -16,13 +16,12 @@ Object.entries(letterDistribution).forEach(
 ); // A0, A1,.... B0, B1, C0, C1,... Z0, _0, _1
 
 //possible ToDo: use typescript better so that the tiles are all acutally members of tileBag?
-export const drawTile = (tileRack: string[]) : string[] => {
-  if(tileRack.length === tileBag.length) { return tileRack; }
+export const maybeNewTile = (tilesDrawn: string[]) : string | null => {
+  if(tilesDrawn.length === tileBag.length) { return null; }
 
-  const remainingTiles = tileBag.filter((t) => tileRack.indexOf(t) === -1);
+  const remainingTiles = tileBag.filter((t) => tilesDrawn.indexOf(t) === -1);
 
-  const nextTile = remainingTiles[Math.floor(Math.random() * remainingTiles.length)];
-  return [...tileRack, nextTile]; // [A8, H2, ... ]
+  return remainingTiles[Math.floor(Math.random() * remainingTiles.length)];
 };
 
 export default tileBag;
