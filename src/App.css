@@ -1,3 +1,6 @@
+.buttons {
+  margin: 10px;
+}
 .rack {
   display: flex;
   flex-wrap: wrap;
@@ -16,6 +19,7 @@
   align-items: center;
   justify-content: center;
   transition: transform 200ms ease;
+  cursor: pointer;
 }
 
 .tile-enter {

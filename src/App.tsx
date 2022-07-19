@@ -15,8 +15,18 @@ function Tile( { letter, onClick } : { letter : string, onClick: () => void } ) 
   );
 }
 
-//function Rack( { tiles } : { tiles: string[] } ) {
-//}
+function Rack( { tiles, discardTile } : { tiles: string[], discardTile: (tile: string) => () => void } ) {
+
+  return (
+      <TransitionGroup className="rack">
+        { tiles.map(t => (
+          <CSSTransition key={t} timeout={{enter: 400, exit: 650}} classNames="tile">
+            <Tile letter={t[0]} onClick={discardTile(t)}/>
+          </CSSTransition>
+        ))}
+      </TransitionGroup>
+    );
+}
 
 function App() {
   const [tiles, setTiles] = useState([] as string[]);
@@ -25,16 +35,12 @@ function App() {
 
   return (
     <div>
-      <button onClick = {() => setTiles(drawTile(tiles))}>
-        Draw tile
-      </button>
-      <TransitionGroup className="rack">
-      { tiles.map(t => (
-        <CSSTransition key={t} timeout={{enter: 400, exit: 650}} classNames="tile">
-          <Tile letter={t[0]} onClick={removeTile(t)}/>
-        </CSSTransition>
-      ))}
-      </TransitionGroup>
+      <div className="buttons">
+        <button onClick={() => setTiles(drawTile(tiles))}>
+          Draw tile
+        </button>
+      </div>
+      <Rack tiles={tiles} discardTile={removeTile}/>
     </div>
   );
 }
