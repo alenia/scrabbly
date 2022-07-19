@@ -29,18 +29,23 @@ function Rack( { tiles, discardTile } : { tiles: string[], discardTile: (tile: s
 }
 
 function App() {
+  const playerCount = 4;
   const [tiles, setTiles] = useState([] as string[]);
+  const [player, setPlayer] = useState(0);
 
-  const removeTile = (tile : string) => (() => setTiles(tiles.filter((t) => t !== tile)));
+  const discardTile = (tile : string) => (() => setTiles(tiles.filter((t) => t !== tile)));
 
   return (
-    <div>
+    <div className={`currentPlayer${player}`}>
       <div className="buttons">
         <button onClick={() => setTiles(drawTile(tiles))}>
           Draw tile
         </button>
+        <button onClick={() => setPlayer((player + 1) % playerCount)}>
+          Next player
+        </button>
       </div>
-      <Rack tiles={tiles} discardTile={removeTile}/>
+      <Rack tiles={tiles} discardTile={discardTile}/>
     </div>
   );
 }

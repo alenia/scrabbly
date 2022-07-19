@@ -1,6 +1,14 @@
-.buttons {
-  margin: 10px;
+:root {
+  --player0-main-color: #55aa55;
+  --player0-light-color: #ccffcc;
+  --player1-main-color: #5678ff;
+  --player1-light-color: #abcdff;
+  --player2-main-color: #ff8754;
+  --player2-light-color: #ffdc99;
+  --player3-main-color: #ee4455;
+  --player3-light-color: #ffaabb;
 }
+
 .rack {
   display: flex;
   flex-wrap: wrap;
@@ -8,10 +16,36 @@
   padding: 10px;
 }
 
+button {
+  background: #555555;
+  color: white;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 24px;
+  margin: 10px;
+}
+
+.currentPlayer0 .buttons button {
+  background: var(--player0-main-color);
+}
+
+.currentPlayer1 .buttons button {
+  background: var(--player1-main-color);
+}
+
+.currentPlayer2 .buttons button {
+  background: var(--player2-main-color);
+}
+
+.currentPlayer3 .buttons button {
+  background: var(--player3-main-color);
+}
+
 .tile {
   /*TODO: This border makes the animation skip a bit*/
-  border: 1px solid #ffaaaa;
-  background: #ffcccc;
+  border: 1px solid #aaaaaa;
+  background: #cccccc;
   height: 50px;
   width: 50px;
   margin-right: 10px;
@@ -20,6 +54,26 @@
   justify-content: center;
   transition: transform 200ms ease;
   cursor: pointer;
+}
+
+.player0 .tile {
+  border: 1px solid var(--player0-main-color);
+  background: var(--player0-light-color);
+}
+
+.player1 .tile {
+  border: 1px solid var(--player1-main-color);
+  background: var(--player1-light-color);
+}
+
+.player2 .tile {
+  border: 1px solid var(--player2-main-color);
+  background: var(--player2-light-color);
+}
+
+.player3 .tile {
+  border: 1px solid var(--player3-main-color);
+  background: var(--player3-light-color);
 }
 
 .tile-enter {
