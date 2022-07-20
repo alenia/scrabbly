@@ -4,8 +4,7 @@ import tileBag, { maybeNewTile } from './tileBag';
 import Rack from './Rack';
 
 //const playerCount = 4;
-//TODO: is this the right name?
-interface PlayerRacks {
+interface Racks {
   0: string[],
   1: string[]
 }
@@ -13,35 +12,36 @@ interface PlayerRacks {
 type PlayerNumber = 0 | 1;
 
 const helpers = {
-  nextPlayerRacks: (tiles: string[], player: PlayerNumber, playerRacks: PlayerRacks) : PlayerRacks => {
+  nextRacks: (tiles: string[], player: PlayerNumber, racks: Racks) : Racks => {
     if (player === 0) {
-      return { 0: tiles, 1: playerRacks[1] }
+      return { 0: tiles, 1: racks[1] }
     } else { // player === 1
-      return { 0: playerRacks[0], 1: tiles }
+      return { 0: racks[0], 1: tiles }
     }
   },
   nextPlayer: (player: PlayerNumber) : PlayerNumber => (player + 1) % 2 as PlayerNumber
 }
 
 function App() {
-  const [playerRacks, setPlayerRacks] = useState({0: [], 1: []} as PlayerRacks);
+  const [racks, setRacks] = useState({0: [], 1: []} as Racks);
   const [activePlayer, setActivePlayer] = useState(0 as PlayerNumber);
-  const activeRack = playerRacks[activePlayer];
+  const activeRack = racks[activePlayer];
 
   const setNextPlayer = () => { setActivePlayer(helpers.nextPlayer(activePlayer)) }
 
-  const setTiles = (tiles: string[]) => {
-    setPlayerRacks(helpers.nextPlayerRacks(tiles, activePlayer, playerRacks))
+  const setActiveRack = (tiles: string[]) => {
+    setRacks(helpers.nextRacks(tiles, activePlayer, racks))
   }
 
+  // this should be in the helper. Especially test that allTiles is set correctly
   const drawTile = () => {
-    const allTiles = [...playerRacks[0],...playerRacks[1]];
+    const allTiles = [...racks[0],...racks[1]];
     const nextTile = maybeNewTile(allTiles);
     if(!nextTile) { return }
-    setTiles([...activeRack, nextTile])
+    setActiveRack([...activeRack, nextTile])
   };
 
-  const discardTile = (tile : string) => (() => setTiles(activeRack.filter((t) => t !== tile)));
+  const discardTile = (tile : string) => (() => setActiveRack(activeRack.filter((t) => t !== tile)));
 
   return (
     <div className={`currentPlayer${activePlayer}`}>
@@ -53,8 +53,8 @@ function App() {
           Next player
         </button>
       </div>
-      <Rack player={0} tiles={playerRacks[0]} discardTile={discardTile} disabled={activePlayer === 0}/>
-      <Rack player={1} tiles={playerRacks[1]} discardTile={discardTile} disabled={activePlayer === 1}/>
+      <Rack player={0} tiles={racks[0]} discardTile={discardTile} disabled={activePlayer === 0}/>
+      <Rack player={1} tiles={racks[1]} discardTile={discardTile} disabled={activePlayer === 1}/>
     </div>
   );
 }
