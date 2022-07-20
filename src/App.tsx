@@ -11,8 +11,9 @@ interface Racks {
 
 type PlayerNumber = 0 | 1;
 
-const helpers = {
-  nextRacks: (tiles: string[], player: PlayerNumber, racks: Racks) : Racks => {
+// Exporting just for test
+export const helpers = {
+  nextRacks: (racks: Racks, {tiles, player} : { tiles: string[], player: PlayerNumber }) : Racks => {
     if (player === 0) {
       return { 0: tiles, 1: racks[1] }
     } else { // player === 1
@@ -30,7 +31,7 @@ function App() {
   const setNextPlayer = () => { setActivePlayer(helpers.nextPlayer(activePlayer)) }
 
   const setActiveRack = (tiles: string[]) => {
-    setRacks(helpers.nextRacks(tiles, activePlayer, racks))
+    setRacks(helpers.nextRacks(racks, { tiles, player: activePlayer }))
   }
 
   // this should be in the helper. Especially test that allTiles is set correctly
