@@ -15,10 +15,10 @@ function Tile( { letter, onClick } : { letter : string, onClick: () => void } ) 
   );
 }
 
-function Rack( { player, tiles, discardTile } : { player: number, tiles: string[], discardTile: (tile: string) => () => void } ) {
+function Rack( { player, tiles, discardTile, disabled } : { player: number, tiles: string[], discardTile: (tile: string) => () => void, disabled: boolean } ) {
 
   return (
-      <TransitionGroup className={`rack player${player}`}>
+      <TransitionGroup className={`rack player${player} ${disabled ? "playable" : "disabled"}`}>
         { tiles.map(t => (
           <CSSTransition key={t} timeout={{enter: 400, exit: 650}} classNames="tile">
             <Tile letter={t[0]} onClick={discardTile(t)}/>
@@ -54,7 +54,6 @@ function App() {
   const setNextPlayer = () => {
     // note playerCount is 2
     let nextPlayer = (player + 1) % 2 as 0 | 1;
-    console.log(nextPlayer);
     setPlayer(nextPlayer);
   }
 
@@ -76,8 +75,8 @@ function App() {
           Next player
         </button>
       </div>
-      <Rack player={0} tiles={playerRacks[0]} discardTile={discardTile}/>
-      <Rack player={1} tiles={playerRacks[1]} discardTile={discardTile}/>
+      <Rack player={0} tiles={playerRacks[0]} discardTile={discardTile} disabled={player === 0}/>
+      <Rack player={1} tiles={playerRacks[1]} discardTile={discardTile} disabled={player === 1}/>
     </div>
   );
 }

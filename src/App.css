@@ -53,28 +53,45 @@ button {
   align-items: center;
   justify-content: center;
   transition: transform 200ms ease;
+}
+
+.playable .tile {
   cursor: pointer;
+  font-weight: bold;
+  border-width: 2px;
 }
 
 .player0 .tile {
-  border: 1px solid var(--player0-main-color);
+  border-color: var(--player0-main-color);
+  color: var(--player0-main-color);
   background: var(--player0-light-color);
 }
 
 .player1 .tile {
-  border: 1px solid var(--player1-main-color);
+  border-color: var(--player1-main-color);
+  color: var(--player1-main-color);
   background: var(--player1-light-color);
 }
 
 .player2 .tile {
-  border: 1px solid var(--player2-main-color);
+  border-color: var(--player2-main-color);
+  color: var(--player2-main-color);
   background: var(--player2-light-color);
 }
 
 .player3 .tile {
-  border: 1px solid var(--player3-main-color);
+  border-color: var(--player3-main-color);
+  color: var(--player3-main-color);
   background: var(--player3-light-color);
 }
+
+.disabled .tile {
+  border-color: #888;
+  color: #888;
+  font-weight: normal;
+  cursor: default;
+}
+
 
 .tile-enter {
   opacity: 0;
@@ -92,7 +109,7 @@ button {
   transform: translateY(0);
 }
 
-.tile:hover{
+.playable .tile:hover{
   transform: rotate(-5deg);
 }
 
