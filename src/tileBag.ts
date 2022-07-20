@@ -5,8 +5,8 @@
 type Char = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J'
   | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U'
   | 'V' | 'W' | 'X' | 'Y' | 'Z' | ' ';
-//export type Tile = `${Char}${number}`;
-export type Tile = `${string}${number}`;
+export type Tile = `${Char}${number}`;
+//export type Tile = `${string}${number}`;
 
 const letterDistribution : { [key in Char] : number } = {
   'A': 9, 'B': 2, 'C': 2, 'D': 4, 'E': 12, 'F': 2, 'G': 3, 'H': 2, 'I': 9,
