@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import './App.css';
-import tileBag, { maybeNewTile } from './tileBag';
+import { Tile, maybeNewTile } from './tileBag';
 import Rack from './Rack';
 
 //const playerCount = 4;
 interface Racks {
-  0: string[],
-  1: string[]
+  0: Tile[],
+  1: Tile[]
 }
 
 type PlayerNumber = 0 | 1;
 
 // Exporting just for test
 export const helpers = {
-  nextRacks: (racks: Racks, {tiles, player} : { tiles: string[], player: PlayerNumber }) : Racks => {
+  nextRacks: (racks: Racks, {tiles, player} : { tiles: Tile[], player: PlayerNumber }) : Racks => {
     if (player === 0) {
       return { 0: tiles, 1: racks[1] }
     } else { // player === 1
@@ -28,11 +28,9 @@ function App() {
   const [activePlayer, setActivePlayer] = useState(0 as PlayerNumber);
   const activeRack = racks[activePlayer];
 
-  const setNextPlayer = () => { setActivePlayer(helpers.nextPlayer(activePlayer)) }
+  const setNextPlayer = () => { setActivePlayer(helpers.nextPlayer(activePlayer)) };
 
-  const setActiveRack = (tiles: string[]) => {
-    setRacks(helpers.nextRacks(racks, { tiles, player: activePlayer }))
-  }
+  const setActiveRack = (tiles: Tile[]) => { setRacks(helpers.nextRacks(racks, { tiles, player: activePlayer })) };
 
   // this should be in the helper. Especially test that allTiles is set correctly
   const drawTile = () => {
@@ -42,7 +40,7 @@ function App() {
     setActiveRack([...activeRack, nextTile])
   };
 
-  const discardTile = (tile : string) => (() => setActiveRack(activeRack.filter((t) => t !== tile)));
+  const discardTile = (tile : Tile) => (() => setActiveRack(activeRack.filter((t) => t !== tile)));
 
   return (
     <div className={`currentPlayer${activePlayer}`}>
