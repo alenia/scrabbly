@@ -1,15 +1,16 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App, { helpers } from './App';
+import { Tile } from './tileBag';
 
 describe('helpers', () => {
   describe('nextRacks', () => {
     it("returns the new state based on the previous state and the player", () => {
       const previousRacks = {
-        0: ["A0","B0","C0"],
-        1: ["A1","B1","C1"],
+        0: ["A0" as Tile,"B0" as Tile,"C0" as Tile],
+        1: ["A1" as Tile,"B1" as Tile,"C1" as Tile],
       };
-      const tiles = ["X0","Y0","Z0"]
+      const tiles = ["X0" as Tile,"Y0" as Tile,"Z0" as Tile]
 
       expect(helpers.nextRacks(previousRacks, {player: 0, tiles})).toEqual({
         0: ["X0","Y0","Z0"],
