@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import App, { helpers } from './App';
 import { Tile } from './tileBag';
 
@@ -49,3 +50,24 @@ test('renders button', () => {
   const buttonElement = screen.getByText(/draw tile/i);
   expect(buttonElement).toBeInTheDocument();
 });
+
+test('first player draws a tile', async () => {
+  const user = userEvent.setup();
+  const { container } = render(<App />);
+  expect(container.getElementsByClassName('tile').length).toEqual(0);
+  const buttonElement = screen.getByText(/draw tile/i);
+  await user.click(buttonElement);
+  const tiles = container.getElementsByClassName('tile');
+  expect(tiles.length).toEqual(1);
+  expect(tiles[0]).toHaveTextContent(/^[A-Z|\s]$/);
+});
+
+test('player drawing the entire tile bag', () => {
+  //get button
+  //click it 100 times
+  //assert that all tiles are in the first player's rack
+  //click it 101 times
+  //assert that there's only 100 tiles
+});
+test('second player draws a tile', () => {});
+test('switching back and forth between players', () => {});
