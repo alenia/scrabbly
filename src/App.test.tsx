@@ -32,6 +32,16 @@ describe('helpers', () => {
       //I don't have to test the type because the app won't compile if the type is wrong
     })
   });
+
+  describe('allTiles', () => {
+    it('returns all the tiles in all the players racks', () => {
+      const racks = {
+        0: ["A0" as Tile,"B0" as Tile,"C0" as Tile],
+        1: ["A1" as Tile,"B1" as Tile,"C1" as Tile],
+      };
+      expect(helpers.allTiles(racks)).toEqual(["A0","B0","C0","A1","B1","C1"]);
+    })
+  });
 });
 
 test('renders button', () => {

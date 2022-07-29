@@ -20,7 +20,8 @@ export const helpers = {
       return { 0: racks[0], 1: tiles }
     }
   },
-  nextPlayer: (player: PlayerNumber) : PlayerNumber => (player + 1) % 2 as PlayerNumber
+  nextPlayer: (player: PlayerNumber) : PlayerNumber => (player + 1) % 2 as PlayerNumber,
+  allTiles: (racks: Racks) : Tile[] => [...racks[0],...racks[1]]
 }
 
 function App() {
@@ -34,8 +35,7 @@ function App() {
 
   // this should be in the helper. Especially test that allTiles is set correctly
   const drawTile = () => {
-    const allTiles = [...racks[0],...racks[1]];
-    const nextTile = maybeNewTile(allTiles);
+    const nextTile = maybeNewTile(helpers.allTiles(racks));
     if(!nextTile) { return }
     setActiveRack([...activeRack, nextTile])
   };
