@@ -2,29 +2,34 @@ import React, { useState } from 'react';
 import { Tile, maybeNewTile } from './tileBag';
 import Rack from './Rack';
 
-//const playerCount = 4;
+
+//Can PlayerNumber dynamically depend on playerCount? Is this overloading the concept of type checking?
+type PlayerCount = 1 | 2 | 3;
+type PlayerNumber = 0 | 1 | 2;
 interface Racks {
   0: Tile[],
-  1: Tile[]
+  1: Tile[],
+  2: Tile[],
 }
-
-type PlayerNumber = 0 | 1;
+const emptyRacks = {
+  0: [],
+  1: [],
+  2: []
+} as Racks
 
 // Exporting just for test
 export const helpers = {
   nextRacks: (racks: Racks, {tiles, player} : { tiles: Tile[], player: PlayerNumber }) : Racks => {
-    if (player === 0) {
-      return { 0: tiles, 1: racks[1] }
-    } else { // player === 1
-      return { 0: racks[0], 1: tiles }
-    }
+    const clonedRacks = { ...racks } as Racks
+    clonedRacks[player] = tiles;
+    return clonedRacks;
   },
   nextPlayer: (player: PlayerNumber) : PlayerNumber => (player + 1) % 2 as PlayerNumber,
   allTiles: (racks: Racks) : Tile[] => [...racks[0],...racks[1]]
 }
 
-function Game() {
-  const [racks, setRacks] = useState({0: [], 1: []} as Racks);
+function Game({playerCount} : {playerCount: PlayerCount}) {
+  const [racks, setRacks] = useState(emptyRacks);
   const [activePlayer, setActivePlayer] = useState(0 as PlayerNumber);
   const activeRack = racks[activePlayer];
 
@@ -51,8 +56,11 @@ function Game() {
           Next player
         </button>
       </div>
-      <Rack player={0} tiles={racks[0]} discardTile={discardTile} disabled={activePlayer !== 0}/>
-      <Rack player={1} tiles={racks[1]} discardTile={discardTile} disabled={activePlayer !== 1}/>
+      {
+        ([...Array(playerCount)]).map((_,i) => (
+          <Rack key={`player${i}`} player={i} tiles={racks[i as PlayerNumber]} discardTile={discardTile} disabled={activePlayer !== i}/>
+        ))
+      }
     </div>
   );
 }
