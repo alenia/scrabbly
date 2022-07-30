@@ -2,20 +2,19 @@ import React, { useState } from 'react';
 import Rack from './Rack';
 import { PlayerCount, PlayerNumber, emptyRacks } from './rackInterfaces'
 import { Tile } from './tileBag';
-import helpers from './stateHelpers';
+import { nextRacks, nextPlayer, nextTileMaybe } from './stateHelpers';
 
 function Game({playerCount} : {playerCount: PlayerCount}) {
   const [racks, setRacks] = useState(emptyRacks);
   const [activePlayer, setActivePlayer] = useState(0 as PlayerNumber);
   const activeRack = racks[activePlayer];
 
-  const setNextPlayer = () => { setActivePlayer(helpers.nextPlayer({player: activePlayer, playerCount})) };
+  const setNextPlayer = () => { setActivePlayer(nextPlayer({player: activePlayer, playerCount})) };
 
-  const setActiveRack = (tiles: Tile[]) => { setRacks(helpers.nextRacks(racks, { tiles, player: activePlayer })) };
+  const setActiveRack = (tiles: Tile[]) => { setRacks(nextRacks(racks, { tiles, player: activePlayer })) };
 
   const drawTile = () => {
-    //REFACTOR const nextTile = helpers.maybeNewTile(racks);
-    const nextTile = helpers.maybeNewTile(helpers.allTiles(racks));
+    const nextTile = nextTileMaybe(racks);
     if(!nextTile) { return }
     setActiveRack([...activeRack, nextTile])
   };
