@@ -29,8 +29,6 @@ describe('helpers', () => {
     it('returns the next sequential player number', () => {
       expect(helpers.nextPlayer(0)).toEqual(1);
       expect(helpers.nextPlayer(1)).toEqual(0);
-
-      //I don't have to test the type because the app won't compile if the type is wrong
     })
   });
 
@@ -59,15 +57,108 @@ test('first player draws a tile', async () => {
   await user.click(buttonElement);
   const tiles = container.getElementsByClassName('tile');
   expect(tiles.length).toEqual(1);
-  expect(tiles[0]).toHaveTextContent(/^[A-Z|\s]$/);
+  //Note: toHaveTextContent seems to strip the space from the text so I can't check \s
+  expect(tiles[0]).toHaveTextContent(/^[A-Z]?$/);
 });
 
-test('player drawing the entire tile bag', () => {
-  //get button
-  //click it 100 times
-  //assert that all tiles are in the first player's rack
-  //click it 101 times
-  //assert that there's only 100 tiles
+test('player drawing the entire tile bag', async () => {
+  const user = userEvent.setup();
+  const { container } = render(<App />);
+  const buttonElement = screen.getByText(/draw tile/i);
+  for(let i = 0; i < 100; i ++) {
+    await user.click(buttonElement);
+  }
+  const tiles = container.getElementsByClassName('tile');
+  expect(tiles.length).toEqual(100);
+
+  //TODO: the button should probably be disabled at this point
+  await user.click(buttonElement);
+  expect(tiles.length).toEqual(100);
+
+  for(let i = 0; i < 100; i ++) {
+    expect(tiles[i]).toHaveTextContent(/^[A-Z]?$/);
+  }
 });
-test('second player draws a tile', () => {});
-test('switching back and forth between players', () => {});
+
+test('the first player can draw tiles and then the second player can draw tiles', async () => {
+  const user = userEvent.setup();
+  const { container } = render(<App />);
+  const drawTileButton = screen.getByText(/draw tile/i);
+  const switchPlayerButton = screen.getByText(/next player/i);
+
+  await user.click(drawTileButton);
+  await user.click(drawTileButton);
+  const player0Rack = container.getElementsByClassName('rack player0')[0];
+  let player0Tiles = player0Rack.getElementsByClassName('tile');
+  const player1Rack = container.getElementsByClassName('rack player1')[0];
+  let player1Tiles = player1Rack.getElementsByClassName('tile');
+  expect(container.getElementsByClassName('tile').length).toEqual(2);
+  expect(player0Tiles.length).toEqual(2)
+  expect(player1Tiles.length).toEqual(0)
+  await user.click(switchPlayerButton);
+  await user.click(drawTileButton);
+  player0Tiles = player0Rack.getElementsByClassName('tile');
+  player1Tiles = player1Rack.getElementsByClassName('tile');
+  expect(container.getElementsByClassName('tile').length).toEqual(3);
+  expect(player0Tiles.length).toEqual(2)
+  expect(player1Tiles.length).toEqual(1)
+});
+
+test('if the first player draws almost all tiles the next player can only draw the remaining tiles', async () => {
+  const user = userEvent.setup();
+  const { container } = render(<App />);
+  const drawTileButton = screen.getByText(/draw tile/i);
+  const switchPlayerButton = screen.getByText(/next player/i);
+
+  // first player draws 98 tiles
+  for(let i = 0; i < 98; i ++) {
+    await user.click(drawTileButton);
+  }
+  await user.click(switchPlayerButton);
+  await user.click(drawTileButton);
+  await user.click(drawTileButton);
+
+  const player0Rack = container.getElementsByClassName('rack player0')[0];
+  let player0Tiles = player0Rack.getElementsByClassName('tile');
+  const player1Rack = container.getElementsByClassName('rack player1')[0];
+  let player1Tiles = player1Rack.getElementsByClassName('tile');
+
+  expect(player0Tiles.length).toEqual(98)
+  expect(player1Tiles.length).toEqual(2)
+  expect(container.getElementsByClassName('tile').length).toEqual(100);
+
+  await user.click(drawTileButton);
+
+  player1Tiles = player1Rack.getElementsByClassName('tile');
+  expect(player1Tiles.length).toEqual(2)
+  expect(container.getElementsByClassName('tile').length).toEqual(100);
+});
+
+test("one player draws, another player draws, orignal player draws again", async () => {
+  const user = userEvent.setup();
+  const { container } = render(<App />);
+  const drawTileButton = screen.getByText(/draw tile/i);
+  const switchPlayerButton = screen.getByText(/next player/i);
+
+  // player 0 draws
+  await user.click(drawTileButton);
+
+  // switch to player 1
+  await user.click(switchPlayerButton);
+  await user.click(drawTileButton);
+
+  // player 1 draws again
+  await user.click(switchPlayerButton);
+  await user.click(drawTileButton);
+
+  const player0Rack = container.getElementsByClassName('rack player0')[0];
+  let player0Tiles = player0Rack.getElementsByClassName('tile');
+  const player1Rack = container.getElementsByClassName('rack player1')[0];
+  let player1Tiles = player1Rack.getElementsByClassName('tile');
+
+  expect(container.getElementsByClassName('tile').length).toEqual(3);
+  expect(player0Tiles.length).toEqual(2)
+  expect(player1Tiles.length).toEqual(1)
+});
+
+test("discarding tiles", () => {});

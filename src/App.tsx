@@ -52,8 +52,8 @@ function App() {
           Next player
         </button>
       </div>
-      <Rack player={0} tiles={racks[0]} discardTile={discardTile} disabled={activePlayer === 0}/>
-      <Rack player={1} tiles={racks[1]} discardTile={discardTile} disabled={activePlayer === 1}/>
+      <Rack player={0} tiles={racks[0]} discardTile={discardTile} disabled={activePlayer !== 0}/>
+      <Rack player={1} tiles={racks[1]} discardTile={discardTile} disabled={activePlayer !== 1}/>
     </div>
   );
 }
