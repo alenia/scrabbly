@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Tile } from './tileBag';
 

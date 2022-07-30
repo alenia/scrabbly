@@ -20,13 +20,4 @@ Object.entries(letterDistribution).forEach(
   }
 ); // A0, A1,.... B0, B1, C0, C1,... Z0, _0, _1
 
-
-export const maybeNewTile = (tilesDrawn: Tile[]) : Tile | null => {
-  if(tilesDrawn.length === tileBag.length) { return null; }
-
-  const remainingTiles = tileBag.filter((t) => tilesDrawn.indexOf(t) === -1);
-
-  return remainingTiles[Math.floor(Math.random() * remainingTiles.length)];
-};
-
 export default tileBag;

@@ -1,35 +1,8 @@
 import React, { useState } from 'react';
-import { Tile, maybeNewTile } from './tileBag';
 import Rack from './Rack';
-
-
-//Can PlayerNumber dynamically depend on playerCount? Is this overloading the concept of type checking?
-type PlayerCount = 1 | 2 | 3;
-type PlayerNumber = 0 | 1 | 2;
-interface Racks {
-  0: Tile[],
-  1: Tile[],
-  2: Tile[],
-}
-const emptyRacks = {
-  0: [],
-  1: [],
-  2: []
-} as Racks
-
-// Exporting just for test
-export const helpers = {
-  nextRacks: (racks: Racks, {tiles, player} : { tiles: Tile[], player: PlayerNumber }) : Racks => {
-    const clonedRacks = { ...racks } as Racks
-    clonedRacks[player] = tiles;
-    return clonedRacks;
-  },
-  nextPlayer: ({ player, playerCount } : { player: PlayerNumber, playerCount: PlayerCount}) : PlayerNumber => (
-                  (player + 1) % playerCount as PlayerNumber
-  ),
-  //loooooooops
-  allTiles: (racks: Racks) : Tile[] => Object.values(racks).flatMap((rack) => rack)
-}
+import { PlayerCount, PlayerNumber, emptyRacks } from './rackInterfaces'
+import { Tile } from './tileBag';
+import helpers from './stateHelpers';
 
 function Game({playerCount} : {playerCount: PlayerCount}) {
   const [racks, setRacks] = useState(emptyRacks);
@@ -40,9 +13,9 @@ function Game({playerCount} : {playerCount: PlayerCount}) {
 
   const setActiveRack = (tiles: Tile[]) => { setRacks(helpers.nextRacks(racks, { tiles, player: activePlayer })) };
 
-  // this should be in the helper. Especially test that allTiles is set correctly
   const drawTile = () => {
-    const nextTile = maybeNewTile(helpers.allTiles(racks));
+    //REFACTOR const nextTile = helpers.maybeNewTile(racks);
+    const nextTile = helpers.maybeNewTile(helpers.allTiles(racks));
     if(!nextTile) { return }
     setActiveRack([...activeRack, nextTile])
   };
