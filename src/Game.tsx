@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Rack from './Rack';
 import { PlayerCount, PlayerNumber, emptyRacks } from './rackInterfaces'
 import { Tile } from './tileBag';
-import { nextRacks, nextPlayer, nextTileMaybe } from './stateHelpers';
+import { nextRacks, nextPlayer, nextTileMaybe } from './reducers';
 
 function Game({playerCount} : {playerCount: PlayerCount}) {
   const [racks, setRacks] = useState(emptyRacks);

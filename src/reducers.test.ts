@@ -1,4 +1,4 @@
-import { nextRacks, nextPlayer, _allTiles, _maybeNewTile, nextTileMaybe } from './stateHelpers';
+import { nextRacks, nextPlayer, _allTiles, _maybeNewTile, nextTileMaybe } from './reducers';
 import tileBag, { Tile } from './tileBag';
 
 describe('nextRacks', () => {
