@@ -3,7 +3,7 @@ import './App.css';
 import Game from './Game';
 
 function App() {
-  return (<Game playerCount={2}/>);
+  return (<Game playerCount={3}/>);
 }
 
 export default App;

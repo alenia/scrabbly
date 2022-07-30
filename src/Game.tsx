@@ -24,8 +24,11 @@ export const helpers = {
     clonedRacks[player] = tiles;
     return clonedRacks;
   },
-  nextPlayer: (player: PlayerNumber) : PlayerNumber => (player + 1) % 2 as PlayerNumber,
-  allTiles: (racks: Racks) : Tile[] => [...racks[0],...racks[1]]
+  nextPlayer: ({ player, playerCount } : { player: PlayerNumber, playerCount: PlayerCount}) : PlayerNumber => (
+                  (player + 1) % playerCount as PlayerNumber
+  ),
+  //loooooooops
+  allTiles: (racks: Racks) : Tile[] => Object.values(racks).flatMap((rack) => rack)
 }
 
 function Game({playerCount} : {playerCount: PlayerCount}) {
@@ -33,7 +36,7 @@ function Game({playerCount} : {playerCount: PlayerCount}) {
   const [activePlayer, setActivePlayer] = useState(0 as PlayerNumber);
   const activeRack = racks[activePlayer];
 
-  const setNextPlayer = () => { setActivePlayer(helpers.nextPlayer(activePlayer)) };
+  const setNextPlayer = () => { setActivePlayer(helpers.nextPlayer({player: activePlayer, playerCount})) };
 
   const setActiveRack = (tiles: Tile[]) => { setRacks(helpers.nextRacks(racks, { tiles, player: activePlayer })) };
 

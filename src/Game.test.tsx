@@ -29,9 +29,14 @@ describe('helpers', () => {
   });
 
   describe('nextPlayer', () => {
-    it('returns the next sequential player number', () => {
-      expect(helpers.nextPlayer(0)).toEqual(1);
-      expect(helpers.nextPlayer(1)).toEqual(0);
+    it('returns the next sequential player number with 2 players', () => {
+      expect(helpers.nextPlayer({player: 0, playerCount: 2})).toEqual(1);
+      expect(helpers.nextPlayer({player: 1, playerCount: 2})).toEqual(0);
+    })
+    it('returns the next sequential player number with 3 players', () => {
+      expect(helpers.nextPlayer({player: 0, playerCount: 3})).toEqual(1);
+      expect(helpers.nextPlayer({player: 1, playerCount: 3})).toEqual(2);
+      expect(helpers.nextPlayer({player: 2, playerCount: 3})).toEqual(0);
     })
   });
 
@@ -40,9 +45,9 @@ describe('helpers', () => {
       const racks = {
         0: ["A0" as Tile,"B0" as Tile,"C0" as Tile],
         1: ["A1" as Tile,"B1" as Tile,"C1" as Tile],
-        2: [],
+        2: ["A2" as Tile],
       };
-      expect(helpers.allTiles(racks)).toEqual(["A0","B0","C0","A1","B1","C1"]);
+      expect(helpers.allTiles(racks)).toEqual(["A0","B0","C0","A1","B1","C1","A2"]);
     })
   });
 });
@@ -84,28 +89,45 @@ test('player drawing the entire tile bag', async () => {
   }
 });
 
-test('the first player can draw tiles and then the second player can draw tiles', async () => {
+test('you can play a three player game', async () => {
   const user = userEvent.setup();
-  const { container } = render(<Game playerCount={2}/>);
+  const { container } = render(<Game playerCount={3}/>);
   const drawTileButton = screen.getByText(/draw tile/i);
   const switchPlayerButton = screen.getByText(/next player/i);
 
-  await user.click(drawTileButton);
-  await user.click(drawTileButton);
   const player0Rack = container.getElementsByClassName('rack player0')[0];
-  let player0Tiles = player0Rack.getElementsByClassName('tile');
   const player1Rack = container.getElementsByClassName('rack player1')[0];
+  const player2Rack = container.getElementsByClassName('rack player2')[0];
+
+  await user.click(drawTileButton);
+  await user.click(drawTileButton);
+  let player0Tiles = player0Rack.getElementsByClassName('tile');
   let player1Tiles = player1Rack.getElementsByClassName('tile');
+  let player2Tiles = player2Rack.getElementsByClassName('tile');
   expect(container.getElementsByClassName('tile').length).toEqual(2);
   expect(player0Tiles.length).toEqual(2)
   expect(player1Tiles.length).toEqual(0)
+  expect(player2Tiles.length).toEqual(0)
+
   await user.click(switchPlayerButton);
   await user.click(drawTileButton);
   player0Tiles = player0Rack.getElementsByClassName('tile');
   player1Tiles = player1Rack.getElementsByClassName('tile');
+  player2Tiles = player2Rack.getElementsByClassName('tile');
   expect(container.getElementsByClassName('tile').length).toEqual(3);
   expect(player0Tiles.length).toEqual(2)
   expect(player1Tiles.length).toEqual(1)
+  expect(player2Tiles.length).toEqual(0)
+
+  await user.click(switchPlayerButton);
+  await user.click(drawTileButton);
+  player0Tiles = player0Rack.getElementsByClassName('tile');
+  player1Tiles = player1Rack.getElementsByClassName('tile');
+  player2Tiles = player2Rack.getElementsByClassName('tile');
+  expect(container.getElementsByClassName('tile').length).toEqual(4);
+  expect(player0Tiles.length).toEqual(2)
+  expect(player1Tiles.length).toEqual(1)
+  expect(player2Tiles.length).toEqual(1)
 });
 
 test('if the first player draws almost all tiles the next player can only draw the remaining tiles', async () => {
@@ -138,7 +160,7 @@ test('if the first player draws almost all tiles the next player can only draw t
   expect(container.getElementsByClassName('tile').length).toEqual(100);
 });
 
-test("one player draws, another player draws, orignal player draws again", async () => {
+test("in a two player game: one player draws, another player draws, orignal player draws again", async () => {
   const user = userEvent.setup();
   const { container } = render(<Game playerCount={2}/>);
   const drawTileButton = screen.getByText(/draw tile/i);
